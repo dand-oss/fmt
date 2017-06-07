@@ -7,7 +7,26 @@ if (HAVE_OPEN)
   set(FMT_SOURCES ${FMT_SOURCES} posix.cc)
 endif ()
 
-add_library(fmt ${FMT_SOURCES} ${FMT_HEADERS} ../README.rst ../ChangeLog.rst)
+if (BUILD_SHARED_LIBS)
+    message(STATUS "Building SHARED libraries")
+    add_library(fmt SHARED ${FMT_SOURCES} ${FMT_HEADERS} ../README.rst ../ChangeLog.rst)
+    if (UNIX AND NOT APPLE)
+      # Fix rpmlint warning:
+      # unused-direct-shlib-dependency /usr/lib/libformat.so.1.1.0 /lib/libm.so.6.
+      target_link_libraries(fmt -Wl,--as-needed)
+    endif (UNIX AND NOT APPLE)
+    target_compile_definitions(fmt PRIVATE FMT_EXPORT INTERFACE FMT_SHARED)
+    set_target_properties(fmt PROPERTIES
+      VERSION ${FMT_VERSION} SOVERSION ${CPACK_PACKAGE_VERSION_MAJOR}
+      WINDOWS_EXPORT_ALL_SYMBOLS ON # asv
+      )
+else (BUILD_SHARED_LIBS)
+    message(STATUS "Building STATIC libraries")
+    add_library(fmt ${FMT_SOURCES} ${FMT_HEADERS} ../README.rst ../ChangeLog.rst)
+    set_target_properties(fmt PROPERTIES
+      VERSION ${FMT_VERSION} SOVERSION ${CPACK_PACKAGE_VERSION_MAJOR}
+      )
+endif (BUILD_SHARED_LIBS)
 add_library(fmt::fmt ALIAS fmt)
 
 # Starting with cmake 3.1 the CXX_STANDARD property can be used instead.
@@ -24,15 +43,6 @@ target_include_directories(fmt PUBLIC
 
 set_target_properties(fmt PROPERTIES
   VERSION ${FMT_VERSION} SOVERSION ${CPACK_PACKAGE_VERSION_MAJOR})
-
-if (BUILD_SHARED_LIBS)
-  if (UNIX AND NOT APPLE)
-    # Fix rpmlint warning:
-    # unused-direct-shlib-dependency /usr/lib/libformat.so.1.1.0 /lib/libm.so.6.
-    target_link_libraries(fmt -Wl,--as-needed)
-  endif ()
-  target_compile_definitions(fmt PRIVATE FMT_EXPORT INTERFACE FMT_SHARED)
-endif ()
 
 #------------------------------------------------------------------------------
 # additionally define a header only library when cmake is new enough

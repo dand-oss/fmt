@@ -2,6 +2,15 @@ message(STATUS "CMake version: ${CMAKE_VERSION}")
 
 cmake_minimum_required(VERSION 2.8.12)
 
+###############
+# ASI default settings
+list(APPEND CMAKE_MODULE_PATH "$ENV{ASV_CMAKE}")
+include(asv_cmake_defaults)
+asv_cmake_defaults( )
+###############
+
+option(BUILD_SHARED_LIBS "Build the shared libraries" ON) # asv
+
 if (POLICY CMP0048) # Version variables
   cmake_policy(SET CMP0048 OLD)
 endif ()
@@ -38,9 +47,9 @@ endif ()
 option(FMT_PEDANTIC "Enable extra warnings and expensive tests." OFF)
 
 # Options that control generation of various targets.
-option(FMT_DOC "Generate the doc target." ${MASTER_PROJECT})
-option(FMT_INSTALL "Generate the install target." ${MASTER_PROJECT})
-option(FMT_TEST "Generate the test target." ${MASTER_PROJECT})
+option(FMT_DOC "Generate the doc target." OFF)
+option(FMT_INSTALL "Generate the install target." ON)
+option(FMT_TEST "Generate the test target." OFF)
 option(FMT_USE_CPP11 "Enable the addition of C++11 compiler flags." ON)
 
 project(FMT)

@@ -460,7 +460,13 @@ FMT_FUNC void print_colored(Color c, CStringRef format, ArgList args) {
 
 #ifndef FMT_HEADER_ONLY
 
+// explicit instantiation
 template struct internal::BasicData<void>;
+
+// explicit instantiation the static members?
+//template const uint32_t internal::BasicData<void>::POWERS_OF_10_32[] ;
+//template const uint64_t internal::BasicData<void>::POWERS_OF_10_64[] ;
+//template const char internal::BasicData<void>::DIGITS[] ;
 
 // Explicit instantiations for char.
 

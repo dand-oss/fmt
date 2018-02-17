@@ -2,6 +2,13 @@ message(STATUS "CMake version: ${CMAKE_VERSION}")
 
 cmake_minimum_required(VERSION 2.8.12)
 
+###############
+# ASI default settings
+list(APPEND CMAKE_MODULE_PATH "$ENV{ASV_CMAKE}")
+include(asv_cmake_defaults)
+asv_cmake_defaults( )
+###############
+
 # Determine if fmt is built as a subproject (using add_subdirectory)
 # or if it is the master project.
 set(MASTER_PROJECT OFF)

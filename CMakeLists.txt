@@ -50,6 +50,16 @@ endif ()
 
 project(FMT CXX)
 
+###############
+# ASI default settings
+list(APPEND CMAKE_MODULE_PATH "$ENV{ASV_CMAKE}")
+include(asv_cmake_defaults)
+asv_cmake_defaults( )
+###############
+
+set( CMAKE_VERBOSE_MAKEFILE on )
+option(BUILD_SHARED_LIBS "Build the shared libraries" ON) # asv
+
 # Determine support for the C++ module scanning and CXX_MODULE File_Sets
 # Requires C++20, CMake >= 3.28 and
 # Generators(Ninja >= 1.11 OR Visual Studio >= 17.4).
@@ -77,9 +87,10 @@ if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.28 AND CMAKE_CXX_STANDARD
   endif ()
 endif ()
 
-option(FMT_DOC "Generate the doc target." ${FMT_MASTER_PROJECT})
-option(FMT_INSTALL "Generate the install target." ${FMT_MASTER_PROJECT})
-option(FMT_TEST "Generate the test target." ${FMT_MASTER_PROJECT})
+# Options that control generation of various targets.
+option(FMT_DOC "Generate the doc target." OFF)
+option(FMT_INSTALL "Generate the install target." ON)
+option(FMT_TEST "Generate the test target." OFF)
 option(FMT_FUZZ "Generate the fuzz target." OFF)
 option(FMT_CUDA_TEST "Generate the cuda-test target." OFF)
 option(FMT_OS "Include OS-specific APIs." ON)

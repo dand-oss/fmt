@@ -11,6 +11,11 @@
 #include "format.h"
 #include <ostream>
 
+#if defined( _WIN64 ) || defined( _WIN32 )
+#include <windows.h>
+#endif // defined( _WIN64 ) || defined( _WIN32 )
+#include <sstream>
+
 namespace fmt {
 
 namespace internal {
@@ -84,10 +89,19 @@ void write(std::basic_ostream<Char> &os, basic_buffer<Char> &buf) {
   do {
     UnsignedStreamSize n = size <= max_size ? size : max_size;
     os.write(data, static_cast<std::streamsize>(n));
+    if ( os.fail() ) {
+       std::ostringstream ostr ;
+       ostr << "write failed" ;
+#if defined( _WIN64 ) || defined( _WIN32 )
+       ostr << " " << GetLastError() << ": " << strerror(GetLastError());
+#endif // defined( _WIN64 ) || defined( _WIN32 )
+       throw std::runtime_error(ostr.str());
+    }
     data += n;
     size -= n;
   } while (size != 0);
-}
+  os.flush() ; // need to get stuff printed...
+} // write()
 
 template <typename Char, typename T>
 void format_value(basic_buffer<Char> &buffer, const T &value) {

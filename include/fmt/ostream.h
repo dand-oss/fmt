@@ -12,6 +12,11 @@
 
 #include "format.h"
 
+#include <sstream>
+#if defined( _WIN64 ) || defined( _WIN32 )
+#include <windows.h>
+#endif // defined( _WIN64 ) || defined( _WIN32 )
+
 FMT_BEGIN_NAMESPACE
 
 template <typename Char> class basic_printf_parse_context;
@@ -98,10 +103,19 @@ void write_buffer(std::basic_ostream<Char>& os, buffer<Char>& buf) {
   do {
     unsigned_streamsize n = size <= max_size ? size : max_size;
     os.write(buf_data, static_cast<std::streamsize>(n));
+    if ( os.fail() ) {
+       std::ostringstream ostr ;
+       ostr << "write failed" ;
+#if defined( _WIN64 ) || defined( _WIN32 )
+       ostr << " " << GetLastError() << ": " << strerror(GetLastError());
+#endif // defined( _WIN64 ) || defined( _WIN32 )
+       throw std::runtime_error(ostr.str());
+    }
     buf_data += n;
     size -= n;
   } while (size != 0);
-}
+  os.flush() ; // need to get stuff printed...
+} // write()
 
 template <typename Char, typename T>
 void format_value(buffer<Char>& buf, const T& value,

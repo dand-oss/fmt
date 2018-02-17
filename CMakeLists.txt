@@ -9,6 +9,8 @@ include(asv_cmake_defaults)
 asv_cmake_defaults( )
 ###############
 
+option(BUILD_SHARED_LIBS "Build the shared libraries" ON) # asv
+
 # Determine if fmt is built as a subproject (using add_subdirectory)
 # or if it is the master project.
 set(MASTER_PROJECT OFF)

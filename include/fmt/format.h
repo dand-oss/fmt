@@ -3573,6 +3573,8 @@ FMT_END_NAMESPACE
   }()
 
 #if defined(FMT_STRING_ALIAS) && FMT_STRING_ALIAS
+//#define FMT_NO_FMT_STRING_ALIAS // ASV - bust on #define fmt()
+//#ifndef FMT_NO_FMT_STRING_ALIAS
 /**
   \rst
   Constructs a compile-time format string. This macro is disabled by default to

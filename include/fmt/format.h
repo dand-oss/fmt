@@ -3574,6 +3574,7 @@ operator"" _a(const wchar_t *s, std::size_t) { return {s}; }
     return S{}; \
   }()
 
+#define FMT_NO_FMT_STRING_ALIAS // ASV - bust on #define fmt()
 #ifndef FMT_NO_FMT_STRING_ALIAS
 /**
   \rst

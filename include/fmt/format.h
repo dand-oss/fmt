@@ -821,6 +821,10 @@ struct is_contiguous<basic_memory_buffer<T, SIZE, Allocator>> : std::true_type {
 
 /** A formatting error such as invalid format string. */
 FMT_CLASS_API
+#ifdef _WIN32
+#pragma warning( push )
+#pragma warning( disable : 4275 )
+#endif
 class FMT_API format_error : public std::runtime_error {
  public:
   explicit format_error(const char* message) : std::runtime_error(message) {}
@@ -3369,6 +3373,9 @@ class FMT_API system_error : public std::runtime_error {
 
   int error_code() const { return error_code_; }
 };
+#ifdef _WIN32
+#pragma warning( pop )
+#endif
 
 /**
   \rst

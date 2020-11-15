@@ -3784,7 +3784,8 @@ template <typename Char, size_t SIZE>
 std::basic_string<Char> to_string(const basic_memory_buffer<Char, SIZE>& buf) {
   auto size = buf.size();
   detail::assume(size < std::basic_string<Char>().max_size());
-  return std::basic_string<Char>(buf.data(), size);
+  const auto& rc = std::basic_string<Char>(buf.data(), size);
+  return rc;
 }
 
 template <typename Char>
@@ -3877,7 +3878,8 @@ std::basic_string<Char> detail::vformat(
     basic_format_args<buffer_context<type_identity_t<Char>>> args) {
   basic_memory_buffer<Char> buffer;
   detail::vformat_to(buffer, format_str, args);
-  return to_string(buffer);
+  const auto& rc = to_string(buffer);
+  return rc;
 }
 
 template <typename Char, FMT_ENABLE_IF(std::is_same<Char, wchar_t>::value)>

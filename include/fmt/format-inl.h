@@ -2746,7 +2746,8 @@ FMT_FUNC std::string detail::vformat(string_view format_str, format_args args) {
   }
   memory_buffer buffer;
   detail::vformat_to(buffer, format_str, args);
-  return to_string(buffer);
+  const auto& rc = to_string(buffer);
+  return rc;
 }
 
 #ifdef _WIN32

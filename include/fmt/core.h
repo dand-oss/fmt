@@ -1849,7 +1849,8 @@ template <typename S, typename Char = char_t<S>>
 FMT_INLINE std::basic_string<Char> vformat(
     const S& format_str,
     basic_format_args<buffer_context<type_identity_t<Char>>> args) {
-  return detail::vformat(to_string_view(format_str), args);
+  const auto& rc = detail::vformat(to_string_view(format_str), args);
+  return rc ;
 }
 
 /**
@@ -1867,7 +1868,8 @@ FMT_INLINE std::basic_string<Char> vformat(
 template <typename S, typename... Args, typename Char = char_t<S>>
 FMT_INLINE std::basic_string<Char> format(const S& format_str, Args&&... args) {
   const auto& vargs = fmt::make_args_checked<Args...>(format_str, args...);
-  return detail::vformat(to_string_view(format_str), vargs);
+  const auto& rc = detail::vformat(to_string_view(format_str), vargs);
+  return rc ;
 }
 
 FMT_API void vprint(string_view, format_args);

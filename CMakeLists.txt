@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.1...3.18)
+project(FMT CXX)
 
 # Fallback for using newer policies on CMake <3.12.
 if(${CMAKE_VERSION} VERSION_LESS 3.12)
@@ -12,6 +13,7 @@ include(asv_cmake_defaults)
 asv_cmake_defaults( )
 ###############
 
+set( CMAKE_VERBOSE_MAKEFILE on )
 option(BUILD_SHARED_LIBS "Build the shared libraries" ON) # asv
 
 # Determine if fmt is built as a subproject (using add_subdirectory)
@@ -59,7 +61,6 @@ if (MASTER_PROJECT AND NOT CMAKE_BUILD_TYPE)
               "CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel.")
 endif ()
 
-project(FMT CXX)
 include(GNUInstallDirs)
 set_verbose(FMT_INC_DIR ${CMAKE_INSTALL_INCLUDEDIR} CACHE STRING
             "Installation directory for include files, a relative path that "

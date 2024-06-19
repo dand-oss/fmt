@@ -5,16 +5,6 @@ if (${CMAKE_VERSION} VERSION_LESS 3.12)
   cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
 endif ()
 
-###############
-# ASI default settings
-list(APPEND CMAKE_MODULE_PATH "$ENV{ASV_CMAKE}")
-include(asv_cmake_defaults)
-asv_cmake_defaults( )
-###############
-
-set( CMAKE_VERBOSE_MAKEFILE on )
-option(BUILD_SHARED_LIBS "Build the shared libraries" ON) # asv
-
 # Determine if fmt is built as a subproject (using add_subdirectory)
 # or if it is the master project.
 if (NOT DEFINED FMT_MASTER_PROJECT)
@@ -157,6 +147,18 @@ if (FMT_MASTER_PROJECT AND NOT CMAKE_BUILD_TYPE)
               "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or "
               "CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel.")
 endif ()
+
+project(FMT CXX)
+
+###############
+# ASI default settings
+list(APPEND CMAKE_MODULE_PATH "$ENV{ASV_CMAKE}")
+include(asv_cmake_defaults)
+asv_cmake_defaults( )
+###############
+
+set( CMAKE_VERBOSE_MAKEFILE on )
+option(BUILD_SHARED_LIBS "Build the shared libraries" ON) # asv
 
 include(GNUInstallDirs)
 set_verbose(FMT_INC_DIR ${CMAKE_INSTALL_INCLUDEDIR} CACHE STRING

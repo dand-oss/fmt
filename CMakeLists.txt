@@ -320,10 +320,18 @@ target_include_directories(fmt ${FMT_SYSTEM_HEADERS_ATTRIBUTE} PUBLIC
 
 set(FMT_DEBUG_POSTFIX d CACHE STRING "Debug library postfix.")
 
-set_target_properties(fmt PROPERTIES
-  VERSION ${FMT_VERSION} SOVERSION ${CPACK_PACKAGE_VERSION_MAJOR}
-  PUBLIC_HEADER "${FMT_HEADERS}"
-  DEBUG_POSTFIX "${FMT_DEBUG_POSTFIX}")
+if (WIN32)
+  set_target_properties(fmt PROPERTIES
+    VERSION ${FMT_VERSION} SOVERSION ${FMT_VERSION}
+    PUBLIC_HEADER "${FMT_HEADERS}"
+    DEBUG_POSTFIX "${FMT_DEBUG_POSTFIX}"
+    DLL_NAME_WITH_SOVERSION ON)
+else(WIN32)
+  set_target_properties(fmt PROPERTIES
+    VERSION ${FMT_VERSION} SOVERSION ${CPACK_PACKAGE_VERSION_MAJOR}
+    PUBLIC_HEADER "${FMT_HEADERS}"
+    DEBUG_POSTFIX "${FMT_DEBUG_POSTFIX}")
+endif(WIN32)
 
 # Set FMT_LIB_NAME for pkg-config fmt.pc. We cannot use the OUTPUT_NAME target
 # property because it's not set by default.

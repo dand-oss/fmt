@@ -336,18 +336,20 @@ target_include_directories(fmt ${FMT_SYSTEM_HEADERS_ATTRIBUTE} PUBLIC
 
 set(FMT_DEBUG_POSTFIX d CACHE STRING "Debug library postfix.")
 
-set_target_properties(fmt PROPERTIES
-  VERSION ${FMT_VERSION} SOVERSION ${CPACK_PACKAGE_VERSION_MAJOR}
-  PUBLIC_HEADER "${FMT_HEADERS}"
-  DEBUG_POSTFIX "${FMT_DEBUG_POSTFIX}"
-
-  # Workaround for Visual Studio 2017:
-  # Ensure the .pdb is created with the same name and in the same directory
-  # as the .lib. Newer VS versions already do this by default, but there is no
-  # harm in setting it for those too. Ignored by other generators.
-  COMPILE_PDB_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
-  COMPILE_PDB_NAME "fmt"
-  COMPILE_PDB_NAME_DEBUG "fmt${FMT_DEBUG_POSTFIX}")
+if (WIN32)
+    set_target_properties(fmt PROPERTIES
+        VERSION ${FMT_VERSION} SOVERSION ${FMT_VERSION}
+        PUBLIC_HEADER "${FMT_HEADERS}"
+        DEBUG_POSTFIX "${FMT_DEBUG_POSTFIX}"
+        DLL_NAME_WITH_SOVERSION ON
+  )
+else (WIN32)
+    set_target_properties(fmt PROPERTIES
+        VERSION ${FMT_VERSION} SOVERSION ${CPACK_PACKAGE_VERSION_MAJOR}
+        PUBLIC_HEADER "${FMT_HEADERS}"
+        DEBUG_POSTFIX "${FMT_DEBUG_POSTFIX}"
+     )
+endif (WIN32)
 
 # Set FMT_LIB_NAME for pkg-config fmt.pc. We cannot use the OUTPUT_NAME target
 # property because it's not set by default.
